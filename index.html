@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>USGS Data Search</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    /* Style the form - display items horizontally */
+    .form-inline {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+    }
+    /* Add some margins for each label */
+    .form-inline label {
+      margin: 5px 10px 5px 0;
+    }
+    /* Style the input fields */
+    .form-inline input {
+      vertical-align: middle;
+      margin: 5px 10px 5px 0;
+      padding: 10px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+    }
+    /* Style the submit button */
+    .form-inline button {
+      padding: 10px 20px;
+      background-color: red;
+      border: 1px solid #ddd;
+      color: white;
+    }
+    .form-inline button:hover {
+      background-color: red;
+    }
+    /* Add responsiveness - display the form controls vertically instead of horizontally on screens that are less than 800px wide */
+    @media (max-width: 800px) {
+      .form-inline input {
+        margin: 10px 0;
+      }
+      .form-inline {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+    form {
+      display: flex;
+      /* flex-direction: column; */
+      justify-content: left;
+      align-items: flex-end;
+      margin-top: 10%;
+    }
+    .form-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .dropbtn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover {background-color: #ddd;}
+    .dropdown:hover .dropdown-content {display: block;}
+    .dropdown:hover .dropbtn {background-color: #3e8e41;}
+    label, input, button {
+      padding: 5px;
+      margin-left: 5px;
+    }
+    label {
+      padding-left: 0px;
+    }
+    .employee-info {
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+    }
+    .error-message {
+      color: red;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <form class="form-inline">
+    <label for="find">Find</label>
+
+    <input type="text" placeholder="How Many" id="HOWMANY" name="HOWMANY">
+
+    <select id="WHAT" onchange="restrict()">
+        <option value="---">---</option>
+        <option value="MOSTRECENT" onclick="disableTimeframe()">MOSTRECENT</option>
+        <option value="WORST" onclick="disableRange()">WORST</option>
+    </select>
+
+    <label for="magnitude">magnitude</label>
+    <input type="text" placeholder="Minimum Magnitude" id="MINMAG" name="MINMAG" required>
+    <label for="to">to</label>
+    <input type="text" placeholder="Maximum Magnitude" id="MAXMAG" name="MAXMAG" required>
+    <label for="time">earthquake(s) in the past</label>
+
+    <select id="TIMEFRAME">
+      <option value="HOUR">HOUR</option>
+      <option value="DAY">DAY</option>
+      <option value="WEEK">WEEK</option>
+      <option value="MONTH">MONTH</option>
+    </select>
+
+    <label for="where">in
+      <select id="COUNTRY">
+        <option value="United States">United States</option>
+        <option value="Canada">Canada</option>
+        <option value="Mexico">Mexico</option>
+        <option value="Italy">Italy</option>
+        <option value="Bolivia">Bolivia</option>
+      </select>
+      <p></p>
+
+      <button type="submit">SUBMIT</button>
+      
+      <p id="demo"></p>
+
+	<p>Below is a list of earthquakes</p>
+	<div class="error-message"></div>
+	<div class="employee-info">
+		<pre>
+		<h1 class="outputheading"></h1>
+		<h4 class="firstname"></h4>		
+		<p class="employeedata"></p>
+		<p class="age"></p>
+		</pre>
+	</div>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="client_code.js"></script>
+	<script type="text/javascript">
+		//enable firstname if checkbox checked
+    function disableTimeframe(){
+      document.getElementById("TIMEFRAME").disabled = true;
+      document.getElementById("MINMAG").disabled = false;
+      document.getElementById("MAXMAG").disabled = false;
+    }
+    function disableRange(){
+      document.getElementById("MINMAG").disabled = true;
+      document.getElementById("MAXMAG").disabled = true;
+      document.getElementById("TIMEFRAME").disabled = false;
+    }
+    function restrict(){
+      let x = document.getElementById("WHAT").value;
+      if(x=="MOSTRECENT"){
+//        document.getElementById("demo").innerHTML=x;
+        disableTimeframe();
+      } else if(x=="WORST"){
+//        document.getElementById("demo").innerHTML=x;
+        disableRange();
+      } 
+    }
+	</script>
+	
+</body>
+</html>
